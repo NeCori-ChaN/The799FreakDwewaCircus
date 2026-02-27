@@ -12,17 +12,21 @@ jobs:
 
       - name: Download Ren'Py 8.5.2
         run: |
+          # โหลดแบบ tar.bz2 จะเสถียรกว่าบน Linux
           curl -L https://www.renpy.org/dl/8.5.2/renpy-8.5.2-sdk.tar.bz2 -o renpy.tar.bz2
           tar -xf renpy.tar.bz2
           mv renpy-8.5.2-sdk renpy-sdk
 
-      - name: Build Web Version
+      - name: Build Web Game
         run: |
-          # สั่ง Build เป็น Web (HTML5)
+          # บังคับรันผ่าน python3 ใน SDK ของมันเอง
+          chmod +x renpy-sdk/renpy.sh
           ./renpy-sdk/renpy.sh . web_build . --dest web_output
+        continue-on-error: false
 
-      - name: Upload Web Artifact
+      - name: Upload Result
+        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: Renpy-Web-Game
+          name: my-web-game
           path: web_output/
