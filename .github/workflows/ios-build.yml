@@ -19,8 +19,10 @@ jobs:
       - name: Build iOS Xcode Project
         run: |
           chmod +x renpy-sdk/renpy.sh
-          ./renpy-sdk/renpy.sh . ios deploy . --build
-          ./renpy-sdk/renpy.sh . ios build . --dest output
+          ./renpy-sdk/renpy.sh . install_sdk ios
+          
+          ./renpy-sdk/renpy.sh . ios_setup .
+          ./renpy-sdk/renpy.sh . build ios --dest output
 
       - name: Upload Result
         uses: actions/upload-artifact@v4
