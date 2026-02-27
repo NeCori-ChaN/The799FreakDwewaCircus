@@ -1,0 +1,28 @@
+name: Build Ren'Py 8.5.2 Web
+on: 
+  push:
+  workflow_dispatch:
+
+jobs:
+  build-web:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+
+      - name: Download Ren'Py 8.5.2
+        run: |
+          curl -L https://www.renpy.org/dl/8.5.2/renpy-8.5.2-sdk.tar.bz2 -o renpy.tar.bz2
+          tar -xf renpy.tar.bz2
+          mv renpy-8.5.2-sdk renpy-sdk
+
+      - name: Build Web Version
+        run: |
+          # สั่ง Build เป็น Web (HTML5)
+          ./renpy-sdk/renpy.sh . web_build . --dest web_output
+
+      - name: Upload Web Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Renpy-Web-Game
+          path: web_output/
